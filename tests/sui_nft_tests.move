@@ -7,26 +7,21 @@ module sui_nft::sui_nft_tests {
 
     #[test]
     fun test_mint_nft() {
-        // Start a test scenario with a user address
         let mut scenario = test_scenario::begin(@0xA);
 
-        // Create a mock clock object
         let mut clock = clock::create_for_testing(test_scenario::ctx(&mut scenario));
         clock::increment_for_testing(&mut clock, 123456789);
 
-        // Mint an NFT
         {
             let ctx = test_scenario::ctx(&mut scenario);
             sui_nft::mint(b"MyNFT", b"A cool NFT", &clock, ctx);
         };
 
-        // Move to the next transaction and verify the NFT
         test_scenario::next_tx(&mut scenario, @0xA);
         {
             let nft = test_scenario::take_from_sender<NFT>(&scenario);
             let (name, desc, timestamp) = sui_nft::get_nft_details(&nft);
 
-            // Assert the NFT metadata is correct
             assert!(*name == string::utf8(b"MyNFT"), 1);
             assert!(*desc == string::utf8(b"A cool NFT"), 2);
             assert!(timestamp == 123456789, 3);
