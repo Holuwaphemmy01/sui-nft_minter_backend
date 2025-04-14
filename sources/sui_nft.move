@@ -23,18 +23,15 @@ module sui_nft::sui_nft {
         transfer::transfer(admin_cap, tx_context::sender(ctx));
     }
 
-    /// Mint a new NFT
     public entry fun mint(
         name: vector<u8>,
         description: vector<u8>,
         clock: &Clock,
         ctx: &mut tx_context::TxContext
     ) {
-        // Ensure inputs are not empty
         assert!(vector::length(&name) > 0, 100);
         assert!(vector::length(&description) > 0, 101);
 
-        // Create the NFT
         let nft = NFT {
             id: object::new(ctx),
             name: string::utf8(name),
@@ -42,11 +39,9 @@ module sui_nft::sui_nft {
             timestamp: clock::timestamp_ms(clock)
         };
 
-        // Transfer the NFT to the sender (minter)
         transfer::transfer(nft, tx_context::sender(ctx));
     }
 
-    /// View NFT details (for testing purposes)
     public fun get_nft_details(nft: &NFT): (&String, &String, u64) {
         (&nft.name, &nft.description, nft.timestamp)
     }
