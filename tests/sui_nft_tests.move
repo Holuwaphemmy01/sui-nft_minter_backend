@@ -29,7 +29,6 @@ module sui_nft::sui_nft_tests {
             test_scenario::return_to_sender(&scenario, nft);
         };
 
-        // Clean up
         clock::destroy_for_testing(clock);
         test_scenario::end(scenario);
     }
@@ -37,19 +36,15 @@ module sui_nft::sui_nft_tests {
     #[test]
     #[expected_failure(abort_code = 100)]
     fun test_mint_empty_name_fails() {
-        // Start a test scenario
         let mut scenario = test_scenario::begin(@0xA);
 
-        // Create a mock clock
         let clock = clock::create_for_testing(test_scenario::ctx(&mut scenario));
 
-        // Attempt to mint with an empty name (should fail)
         {
             let ctx = test_scenario::ctx(&mut scenario);
             sui_nft::mint(b"", b"Valid description", &clock, ctx);
         };
 
-        // Clean up
         clock::destroy_for_testing(clock);
         test_scenario::end(scenario);
     }
@@ -57,19 +52,16 @@ module sui_nft::sui_nft_tests {
     #[test]
     #[expected_failure(abort_code = 101)]
     fun test_mint_empty_description_fails() {
-        // Start a test scenario
+
         let mut scenario = test_scenario::begin(@0xA);
 
-        // Create a mock clock
         let clock = clock::create_for_testing(test_scenario::ctx(&mut scenario));
 
-        // Attempt to mint with an empty description (should fail)
         {
             let ctx = test_scenario::ctx(&mut scenario);
             sui_nft::mint(b"Valid name", b"", &clock, ctx);
         };
 
-        // Clean up
         clock::destroy_for_testing(clock);
         test_scenario::end(scenario);
     }
