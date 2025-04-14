@@ -7,18 +7,15 @@ module sui_nft::sui_nft {
     use sui::clock::{Self, Clock};
     use std::string::{Self, String};
 
-    /// Represents an NFT with metadata
     public struct NFT has key, store {
-        id: object::UID,         // Unique identifier
-        name: String,            // Name of the NFT
-        description: String,     // Description of the NFT
-        timestamp: u64           // When it was minted
+        id: object::UID,
+        name: String,
+        description: String,
+        timestamp: u64
     }
 
-    /// Admin capability to initialize the platform
     public struct AdminCap has key { id: object::UID }
 
-    /// Initialize the platform (called once by admin)
     fun init(ctx: &mut tx_context::TxContext) {
         let admin_cap = AdminCap {
             id: object::new(ctx)
